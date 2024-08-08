@@ -1,6 +1,6 @@
 {
   "/login/page": "app/login/page.js",
-  "/signin/page": "app/signin/page.js",
-  "/figma/page": "app/figma/page.js",
-  "/otpform/page": "app/otpform/page.js"
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/[postId]/page": "app/dashboard/[postId]/page.js",
+  "/roles/page": "app/roles/page.js"
 }

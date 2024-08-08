@@ -16,20 +16,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/login/page.js"
     ],
-    "/signin/page": [
+    "/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/signin/page.js"
+      "static/chunks/app/dashboard/page.js"
     ],
-    "/figma/page": [
+    "/dashboard/[postId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/figma/page.js"
+      "static/chunks/app/dashboard/[postId]/page.js"
     ],
-    "/otpform/page": [
+    "/roles/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/otpform/page.js"
+      "static/chunks/app/roles/page.js"
     ]
   }
 }
