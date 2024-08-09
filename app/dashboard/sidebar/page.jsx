@@ -1,7 +1,10 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation'; // usePathname hook
+
 import time from '../../../assets/imgs/icons/timer.png';
 import massage from '../../../assets/imgs/icons/masseges.png';
 import home from "../../../assets/imgs/icons/home.png";
@@ -10,43 +13,55 @@ import setting from '../../../assets/imgs/icons/setting.png';
 import log from '../../../assets/imgs/icons/log.png';
 import roles from '../../../assets/imgs/icons/roles.png';
 import employees from '../../../assets/imgs/icons/employees.png';
-import { useRouter } from 'next/navigation';
-
 
 const Sidebar = () => {
+  const router = useRouter();
+  const pathname = usePathname(); // Get the current pathname
+
   const [activePage, setActivePage] = useState('Home'); // Default active page
+
+  useEffect(() => {
+    // Update activePage based on the current route
+    if (pathname.includes('/dashboard/employee')) {
+      setActivePage('Employee');
+    } else if (pathname.includes('/dashboard/roles')) {
+      setActivePage('Roles');
+    } else if (pathname.includes('/dashboard')) {
+      setActivePage('Home');
+    }
+  
+  }, [pathname]);
 
   const getImageClass = (page) => (
     activePage === page ? 'filter brightness-0 invert' : ''
   );
 
- const router =useRouter();
   const handleNavigation = (page, route) => {
-    setActivePage(page);
     router.push(route);
-  }
+    setActivePage(page);
+  };
+
   return (
-       <div className="flex container h-fit w-full  lx :w-full">
-    <div className='bg-white h-full mt-8 w-44 fixed sm:fixed md:fixed lg:fixed'>
-      <div className='mt-16'>
+    <div className="flex container h-fit w-full lx:w-full">
+      <div className='bg-white h-full mt-8 w-44 fixed'>
+        <div className='mt-16'>
           <h2
             className={`m-4 flex items-center gap-1 ${
               activePage === 'Home' ? 'bg-blue-600 text-white px-6 rounded-s-sm p-1' : 'text-gray-600'
             }`}
-            onClick={() => handleNavigation('Home','/dashboard')}
+            onClick={() => handleNavigation('Home', '/dashboard')}
           >
             <Image
               className={`w-4 h-4 ${getImageClass('Home')}`}
               src={home}
               alt="Home Icon"
-              
             /> Home
           </h2>
           <h2
             className={`m-4 flex items-center gap-1 ${
               activePage === 'Employee' ? 'bg-blue-600 text-white px-2 rounded-s-sm p-1' : 'text-gray-600'
             }`}
-            onClick={() => setActivePage('Employee')}
+            onClick={() => handleNavigation('Employee', '/dashboard/employee')}
           >
             <Image
               className={`w-6 h-6 ${getImageClass('Employee')}`}
@@ -58,7 +73,7 @@ const Sidebar = () => {
             className={`m-4 flex items-center gap-1 ${
               activePage === 'Roles' ? 'bg-blue-600 text-white px-2 rounded-s-sm p-1' : 'text-gray-600'
             }`}
-            onClick={() => handleNavigation('Roles','/roles')}
+            onClick={() => handleNavigation('Roles', '/dashboard/roles')}
           >
             <Image
               className={`w-4 h-4 ${getImageClass('Roles')}`}
@@ -130,6 +145,6 @@ const Sidebar = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Sidebar;
