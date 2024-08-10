@@ -4,17 +4,18 @@ import { useDispatch } from 'react-redux';
 import { storeEmail } from '../lib/features/slices/userslice';
 import forgotpasswordimage from '../../assets/login.png';
 import { useRouter } from 'next/navigation';
-
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
+
 const EmailForm = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
- const router = useRouter();
+  const router = useRouter();
 
-  //Handle input change
+  // Handle input change
   const handleChange = (e) => {
     setEmail(e.target.value);
     setError(''); // Clear error when user starts typing
@@ -32,28 +33,50 @@ const EmailForm = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Perform validation
     const validationError = validate();
     if (validationError) {
       setError(validationError);
       return;
     }
+  
+    // Prepare the data you want to post
+    const data = { email };
+  
+    try {
+      // Make the POST request using Axios
+      const response = await axios.post('https://management-system-backend-0wae.onrender.com/verify-email/mongo/', data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    setError('');
-    setMessage('Verifying your email...');
+      // Handle the response based on the status code
+      if (response.status === 200) {
+        // Email exists, navigate to forgot password page
+        setMessage('Verifying your email...');
+        dispatch(storeEmail(email));
+        console.log('Email saved in Redux store:', email);
 
-    // Save email in Redux store
-    dispatch(storeEmail(email));
-    console.log('Email saved in Redux store:', email);
+        setTimeout(() => {
+          setMessage('Please verify your email.');
+          router.push('/forgotpassword');
+        }, 1000);
 
-    setTimeout(() => {
-      setMessage('Please verify your email.');
-      // Navigate to reset password page
-
-    
-     router.push('/forgotpassword');
-    }, 1000);
+      } 
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        // Email does not exist
+        setError('Email does not exist.');
+      } else {
+        // Some other issue
+        setError('Something went wrong. Please try again.');
+      }
+      
+    }
   };
 
   return (

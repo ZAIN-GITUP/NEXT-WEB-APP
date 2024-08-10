@@ -6,14 +6,16 @@ import { useRouter } from 'next/navigation';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Image from 'next/image';
 import loginimage from '../../assets/login.png';
-
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { storeToken } from '../lib/features/slices/userslice';
 const Loginform = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const router  = useRouter();
-
+  const dispatch = useDispatch();
   const validate = () => {
     const newErrors = {};
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[com]{3}$/;
@@ -34,21 +36,38 @@ const Loginform = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length === 0) {
-      router.push('/figma');
-      console.log('Form submitted:', { email, password });
+      try {
+        const response = await axios.post('https://management-system-backend-0wae.onrender.com/login/mongo/', {
+          email,
+          password,
+        });
+
+        if (response.data && response.data.token) {
+          // Store the token in Redux
+          dispatch(storeToken(response.data.token));
+
+
+    
+          router.push('/dashboard');
+          console.log('Form submitted:', { email, password });
+        } else {
+          console.error('No token in response:', response.data);
+        }
+      } catch (error) {
+        console.error('Login failed:', error.response?.data || error.message);
+      }
     } else {
       setErrors(newErrors);
     }
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+  
   return (
     <section className="h-screen flex  flex-col sm:flex-row md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
       <div className="md:w-1/3 max-w-xs">

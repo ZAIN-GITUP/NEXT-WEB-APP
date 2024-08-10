@@ -13,7 +13,7 @@ import add from "../../../assets/imgs/icons/addbox.png";
 import Sidebar from "../sidebar/page";
 import Navbar from "../navbar/page";
 import AddRolesPostModal from "./addrolespostmodel";
-import ConfirmationModal from '../confirmations/page';
+import ConfirmationrolesdeleteModal from './conformtionrolesdeletion';
 import Postbuttomsection from "../postbuttomsection/page";
 
 const Roles = () => {
@@ -23,11 +23,19 @@ const Roles = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
+  const filteredPosts = posts.filter(post =>
+    post.id.toString().includes(searchTerm) ||
+    post.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   // Pagination 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -35,32 +43,34 @@ const Roles = () => {
   const lastSetOfPages = totalPages > 5 ? [totalPages - 1, totalPages] : [];
   const middlePages = totalPages > 8 ? [6, 7, 8] : [];
 
-  const handleDeletePost = (id) => {
-    setPosts(posts.filter(post => post.id !== id));
+  const handleDeleteClick = (id) => {
+    setPostIdToDelete(id);
+    setModalVisible(true); // Show the confirmation modal
   };
-
-  const handleSavePost = (updatedPost) => {
-    setPosts(posts.map(post => post.id === updatedPost.id ? updatedPost : post));
+  
+  const handleConfirmDelete = () => {
+    setPosts(posts.filter(post => post.id !== postIdToDelete)); // Delete the post
+    setPostIdToDelete(null); // Reset the postIdToDelete state
+    setModalVisible(false); // Hide the confirmation modal
+  };
+  
+  const handleCancelDelete = () => {
+    setPostIdToDelete(null); // Reset the postIdToDelete state
+    setModalVisible(false); // Hide the confirmation modal
   };
 
   const handleAddClick = () => {
     setIsAddModalOpen(true);
-  };
-
+  }
   const handleSaveNewPost = (newPost) => {
-    setPosts([newPost, ...posts]);
+    const newId = posts.length + 1;  // Automatically generate the ID based on the number of posts
+    const postWithId = { ...newPost, id: newId }; // Add the new ID to the post object
+    setPosts([...posts, postWithId]); // Add the post to the end of the posts array
     setIsAddModalOpen(false);
   };
+  
 
-  const handleConfirmDelete = () => {
-    handleDeleteSelectedPosts();
-    setModalVisible(false);
-  };
-
-  const handleCancelDelete = () => {
-    setModalVisible(false);
-  };
-
+  
   return (
     <div className="flex container h-fit w-full lx:w-full">
       <div className='h-dvh fixed sm:fixed md:fixed lg:fixed'>
@@ -68,9 +78,10 @@ const Roles = () => {
       </div>
 
       <div className="ml-44 left-0 w-full right-0">
-        <div className="p-2 ml-1 place-items-start flex bg-slate-200 w-full">
+       {/* Navbar */}
+       <header className={`ml-1 top-0 p-2 shadow-md  w-full  bg-slate-200  `}>
           <Navbar />
-        </div>
+        </header>
 
         <div className='ml-1 mt-1 h-screen'>
           <div className="flex bg-slate-200 h-10 justify-between mb-0">
@@ -81,11 +92,12 @@ const Roles = () => {
                 <Image className="h-4 w-4 object-cover mt-1" src={add} alt="" />
               </button>
 
-              <ConfirmationModal
-                isVisible={isModalVisible}
-                onConfirm={handleConfirmDelete}
-                onCancel={handleCancelDelete}
-              />
+              <ConfirmationrolesdeleteModal
+  isVisible={isModalVisible}
+  onConfirm={handleConfirmDelete}
+  onCancel={handleCancelDelete}
+/>
+
             </div>
           </div>
 
@@ -131,13 +143,15 @@ const Roles = () => {
           <input type="checkbox" checked={post.authorizations.export} readOnly />
         </td>
         <td>
-          <button className="relative group" onClick={() => handleDeletePost(post.id)}>
-            <Image className="h-4 w-4 mr-6 object-cover opacity-70" src={deleting} alt="" />
-            <span className="absolute -left-3 -top-2 transform -translate-y-1/2 ml-2 w-max px-2 py-1 text-xs text-white bg-gray-700 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              Delete
-            </span>
-          </button>
-        </td>
+  <button className="relative group" onClick={() => handleDeleteClick(post.id)}>
+    <Image className="h-4 w-4 mr-6 object-cover opacity-70" src={deleting} alt="" />
+    <span className="absolute -left-3 -top-2 transform -translate-y-1/2 ml-2 w-max px-2 py-1 text-xs text-white bg-gray-700 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      Delete
+    </span>
+  </button>
+  
+
+</td>
       </tr>
     ))}
   </tbody>

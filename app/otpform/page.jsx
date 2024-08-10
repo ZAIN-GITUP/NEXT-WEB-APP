@@ -1,15 +1,22 @@
-"use client"
+"use client";
 import React, { useState, useRef } from 'react';
-
 import Image from 'next/image';
 import otpimg from '../../assets/sign.png';
 import { useRouter } from 'next/navigation';
-import usereducer from '../lib/features/slices/userslice';
-const OTPForm = ({ dummyOTP = '234567' }) => {
+import { useSelector, useDispatch } from 'react-redux';
+import { clearVerifyCode } from '../lib/features/slices/userslice';
+
+const OTPForm = () => {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [error, setError] = useState('');
   const [otpValid, setOtpValid] = useState(false);
   const inputs = useRef([]);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const dummyOTP = useSelector((state) => state.user.verifycode);
+  
+  console.log('Retrieved verifycode from Redux:', dummyOTP);
 
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return;
@@ -17,7 +24,6 @@ const OTPForm = ({ dummyOTP = '234567' }) => {
     newOtp[index] = element.value;
     setOtp(newOtp);
 
-    // Focus on next input if current one is filled
     if (element.value && index < 5) {
       inputs.current[index + 1].focus();
     }
@@ -53,13 +59,15 @@ const OTPForm = ({ dummyOTP = '234567' }) => {
     } else {
       setError('');
       setOtpValid(true);
+
+      // Clear verifycode from Redux after successful OTP validation
+      dispatch(clearVerifyCode());
+      console.log('verifycode cleared from Redux');
     }
   };
 
-  const reducer=useRouter();
-
   if (otpValid) {
-    reducer.push('/login')
+    router.push('/login');
   }
 
   return (

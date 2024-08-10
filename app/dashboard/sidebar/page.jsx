@@ -22,14 +22,20 @@ const Sidebar = () => {
 
   useEffect(() => {
     // Update activePage based on the current route
-    if (pathname.includes('/dashboard/employee')) {
-      setActivePage('Employee');
-    } else if (pathname.includes('/dashboard/roles')) {
+    if (pathname.includes('/dashboard/roles')) {
       setActivePage('Roles');
+    } else if (pathname.includes('/dashboard/employee')) {
+      setActivePage('Employee');
+    } else if (pathname.includes('/dashboard/massaging')) {
+      setActivePage('Massaging');
+    } else if (pathname.includes('/dashboard/statistics')) {
+      setActivePage('Statistics');
+    } else if (pathname.includes('/dashboard/settings')) {
+      setActivePage('Settings');
     } else if (pathname.includes('/dashboard')) {
       setActivePage('Home');
     }
-  
+
   }, [pathname]);
 
   const getImageClass = (page) => (
@@ -37,8 +43,8 @@ const Sidebar = () => {
   );
 
   const handleNavigation = (page, route) => {
-    router.push(route);
     setActivePage(page);
+    router.push(route);
   };
 
   return (
@@ -97,7 +103,7 @@ const Sidebar = () => {
             className={`m-4 flex items-center gap-1 ${
               activePage === 'Massaging' ? 'bg-blue-600 text-white px-2 rounded-s-sm p-1' : 'text-gray-600'
             }`}
-            onClick={() => setActivePage('Massaging')}
+            onClick={() => handleNavigation('Massaging', '/dashboard/massaging')}
           >
             <Image
               className={`w-4 h-4 ${getImageClass('Massaging')}`}

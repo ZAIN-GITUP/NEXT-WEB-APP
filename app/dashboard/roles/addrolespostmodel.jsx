@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-
+import { useId } from 'react';
 const AddRolesPostModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     id: "",
@@ -17,6 +17,11 @@ const AddRolesPostModal = ({ isOpen, onClose, onSave }) => {
     },
   });
 
+if (formData.id=formData.id)
+
+{
+formData.id = formData.id + 1;
+}
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -43,17 +48,7 @@ const AddRolesPostModal = ({ isOpen, onClose, onSave }) => {
       <div className="bg-white rounded-lg p-6 w-11/12 md:w-2/3 lg:w-1/3">
         <h2 className="text-xl font-semibold mb-4">Add Role</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700">ID</label>
-            <input
-              type="text"
-              name="id"
-              value={formData.id}
-              onChange={handleInputChange}
-              className="w-full border rounded p-2 mt-1"
-              required
-            />
-          </div>
+        
           <div className="mb-4">
             <label className="block text-gray-700">Name</label>
             <input

@@ -150,10 +150,10 @@ const PostPageFigma = () => {
       </div>
 
     <div className="ml-44 left-0  w-full right-0">
-      <div className="p-2 ml-1 place-items-start flex bg-slate-200 w-full">
-        <Navbar/>
-     
-      </div>
+        {/* Navbar */}
+        <header className={`ml-1 top-0 p-2 shadow-md  w-full  bg-slate-200  `}>
+          <Navbar />
+        </header>
 
       <div className='ml-1 mt-1 h-screen'>
         <div className="flex bg-slate-200 h-10 justify-between mb-0">

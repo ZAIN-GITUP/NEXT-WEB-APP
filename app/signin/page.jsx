@@ -5,7 +5,7 @@ import signinimg from '../../assets/sign.png';
 import { useRouter } from 'next/navigation';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useDispatch } from "react-redux";
-import { storeUser } from "../lib/features/slices/userslice";
+import { storeUser,storeverifycode } from "../lib/features/slices/userslice";
 import axios from 'axios';
 
 const SignupForm = () => {
@@ -62,20 +62,31 @@ const SignupForm = () => {
     e.preventDefault();
 
     if (handleValidation()) {
-      {/*  try {
-            const response = await axios.post('https://management-system-backend-0wae.onrender.com/signup/mongo/', inputdata, {
-                
-            });
-            console.log('Response:', response.data);*/}
-            dispatch(storeUser(inputdata));
-            console.log(storeUser(inputdata));
-            
-            alert('Sign up successful!');
-            router.push('/otpform');
-        } 
+      try {
+        const response = await axios.post(
+          'https://management-system-backend-0wae.onrender.com/signup/mongo/',
+          inputdata
+        );
+  
+        // Accessing the verifyCode from the response
+        const verifycode = response.data.verifyCode;
         
-    
-};
+        // Ensure verifyCode is defined before dispatching
+        if (verifycode) {
+          dispatch(storeverifycode(verifycode));
+          console.log('verifycode stored in Redux:');
+        } else {
+          console.error('verifycode is undefined in the response');
+        }
+  
+        alert('Sign up successful!');
+        router.push('/otpform');
+      } catch (error) {
+        console.error('Error during sign up:', error);
+        alert('Sign up failed. Please try again.');
+      }
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

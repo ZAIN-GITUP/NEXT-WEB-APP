@@ -1,5 +1,8 @@
 {
-  "/dashboard/employee/page": "app/dashboard/employee/page.js",
+  "/login/page": "app/login/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/dashboard/roles/page": "app/dashboard/roles/page.js"
+  "/dashboard/employee/page": "app/dashboard/employee/page.js",
+  "/dashboard/roles/page": "app/dashboard/roles/page.js",
+  "/dashboard/massaging/page": "app/dashboard/massaging/page.js"
 }
