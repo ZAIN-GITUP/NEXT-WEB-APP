@@ -16,15 +16,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/page.js"
     ],
-    "/dashboard/employee/page": [
+    "/dashboard/newmember/addnewmember/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/employee/page.js"
+      "static/chunks/app/dashboard/newmember/addnewmember/page.js"
+    ],
+    "/dashboard/[postId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/[postId]/page.js"
+    ],
+    "/userprofile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/userprofile/page.js"
     ],
     "/dashboard/roles/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/dashboard/roles/page.js"
+    ],
+    "/dashboard/employee/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/employee/page.js"
     ],
     "/dashboard/massaging/page": [
       "static/chunks/webpack.js",

@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // Import Link for navigation
 import pict from "../../../assets/imgs/icons/Bill_smit.png";
 import searching from "../../../assets/imgs/icons/search.png";
 import notifi from "../../../assets/imgs/icons/notifi.png";
@@ -31,13 +32,18 @@ const Navbar = ({ searchTerm, onSearchChange }) => {
         <button className="p-2 rounded-full hover:shadow-xl hover:bg-slate-400">
           <Image className="w-8 h-6" src={notifi} alt="Notifications" />
         </button>
-        <div className="flex items-center gap-2">
-          <Image src={pict} alt="User Profile" className="w-10 h-10 rounded-full" />
-          <p className="text-sm hidden md:block">Bill Smith</p>
-        </div>
+
+    
+        <Link href="/userprofile"> 
+          <div className="flex items-center gap-2 cursor-pointer">
+            <Image src={pict} alt="User Profile" className="w-10 h-10 rounded-full" />
+            <p className="text-sm hidden md:block">Bill Smith</p>
+          </div>
+        </Link>
       </div>
     </div>
   );
 };
 
 export default Navbar;
+ 
